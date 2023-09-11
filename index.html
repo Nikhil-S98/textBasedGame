@@ -9,12 +9,28 @@
     <body>
         <div id="gameArea">
             <div id="gameTop">
-                <div id="textContainer"></div>
-                <div id="actionContainer"></div>
+                <div id="textContainer">
+                    
+                </div>
+
+
+                <div id="actionContainer">
+                    <div id="nameInputContainer" style="display: flex;">
+                        <label for="playerName">what is your name?</label>
+                        <input type="text" id="playerName">
+                        <button id="okButton">OK</button>
+                    </div>
+                </div>
+
             </div>
 
             <div id="gameBottom">
-                <div id="buttonContainer"></div>
+                <div id="buttonContainer">
+                    <button id="attackButton">attack</button>
+                    <button id="guardButton">guard</button>
+                    <button id="talkButton">talk</button>
+                </div>
+                
                 <div id="optionContainer"></div>
             </div>
         </div>
@@ -22,6 +38,6 @@
 
 
 
-        <script src="js/game.js"></script>
+        <script src="./js/game.js"></script>
     </body>
 </html>

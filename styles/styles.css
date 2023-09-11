@@ -18,14 +18,12 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #000000;
-    border: solid 1px #3b1564;
-    border-radius: 10px;
+    border: solid 1px #24004a;
     height: 600px;
     width: 1000px;
 }
 
 #gameTop {
-    border: #ffffff solid 1px;
     height: 70%;
     display: flex;
     flex-direction: row;
@@ -38,12 +36,19 @@ body {
 #actionContainer {
     width: 60%;
     border-right: #ffffff solid 1px;
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#nameInputContainer {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 #gameBottom {
-    border: #ffffff solid 1px;
-    border-top: 0;
+    border-top: #ffffff solid 1px;;
     height: 30%;
     display: flex;
     flex-direction: row;
@@ -52,6 +57,23 @@ body {
 #buttonContainer {
     width: 60%;
     border-right: #ffffff solid 1px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15%;
+}
+
+#attackButton {
+
+}
+
+#guardButton {
+
+}
+
+#talkButton {
+
 }
 
 #optionContainer {
