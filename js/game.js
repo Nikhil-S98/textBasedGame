@@ -1,14 +1,17 @@
 //object constructor for player and demon lord
-function Character(name, health, attackPower, defense) {
+function Character(name, health, attackPower, defense, item1, item2, item3) {
     this.name = name;
     this.health = health;
     this.attackPower = attackPower;
     this.defense = defense;
+    this.item1 = item1;
+    this.item2 = item2;
+    this.item3 = item3;
 }
 
 // declaring player character and demon lord
-let player = new Character('', 100, 10, 10);
-let demonLord = new Character('', 100, 10, 10);
+let player = new Character('', 100, 10, 10, '', '', '');
+let demonLord = new Character('', 100, 10, 10, '', '', '');
 
 // function to generate demon lord's name
 function demonLordNameGen() {
@@ -47,8 +50,13 @@ function startGame() {
 // event listener for ok button and start of game
 okButton.addEventListener('click', startGame);
 
-// start of game after player enters name
+// function for the bulk of game after player enters name
 function main() {
+
+    // Function to scroll to the bottom of a container
+    function scrollToBottom(container) {
+    container.scrollTop = container.scrollHeight;
+}
 
     // declaring main game constants
     // start of game narration and segue into item selection
@@ -62,6 +70,7 @@ function main() {
         "After a long and exhausting boat ride, some minor trickery and sneakiness, you have come face to face with The Demon Lord himself!",
         "You are standing in the throne room of " + demonLord.name + ", The Demon Lord. He is sitting on his throne, and he is laughing at you.",
         "You think to yourself that The Demon Lord may be laughing now, but he won't be laughing for long because unknown to him, you have brought with you the three items needed to defeat him!",
+        "You think back on the three items you have brought with you..."
     ];
 
     // function to display start of game narration
@@ -76,13 +85,90 @@ function main() {
                 document.getElementById('textContainer').appendChild(startNarrationElement);
                 document.getElementById('textContainer').appendChild(br);
                 index++;
-                setTimeout(displayNextNarration, 2000); // Display next text after 2 seconds
+
+                scrollToBottom(textContainer);
+                setTimeout(displayNextNarration, 20); // Display next text after 2 seconds
+            }
+            else {
+                itemSelect();
             }
         }
 
         displayNextNarration();
+ 
     }
     displayStartNarration();
     // end of start of game narration
 
+    // item select section
+    // declaring item constants
+    const sword = document.getElementById('sword');
+    const shield = document.getElementById('shield');
+    const spellBook = document.getElementById('spellBook');
+    const potion = document.getElementById('potion');
+    const pasta = document.getElementById('pasta');
+
+    // declaring item description constants
+    const swordDescription = document.getElementById('swordDescription');  
+    const shieldDescription = document.getElementById('shieldDescription');
+    const spellBookDescription = document.getElementById('spellBookDescription');
+    const potionDescription = document.getElementById('potionDescription');
+    const pastaDescription = document.getElementById('pastaDescription');
+
+    // function for item select section
+    function itemSelect() {
+        const itemSelect = document.getElementById('itemSelect');
+        itemSelect.style.display = 'flex';
+
+        // Get all list items (items)
+        const items = document.querySelectorAll('.selectionChoices li');
+        // Get all item descriptions
+        const itemDescriptions = document.querySelectorAll('.itemDescription');
+
+        // adding mousover event listeners to each item
+        items.forEach((item, index) => {
+            item.addEventListener('mouseover', () => {
+                // Show the corresponding item description
+                itemDescriptions[index].style.display = 'flex';
+            });
+    
+            item.addEventListener('mouseout', () => {
+                // Hide the corresponding item description
+                itemDescriptions[index].style.display = 'none';
+            });
+        });
+
+        const itemButtons = document.querySelectorAll('.selectionChoices button');
+
+        // adding selected buttons to player's inventory
+        itemButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                // determining which item button was clicked
+                const selectedItem = button.textContent;
+
+                // updating the player's object based on the selected item
+                if (index === 0) {
+                    player.item1 = selectedItem;
+                } else if (index === 1) {
+                    player.item2 = selectedItem;
+                } else if (index === 2) {
+                    player.item3 = selectedItem;
+                }
+
+                // visual feedback
+                button.style.display = 'none';
+
+                // Checking if all three items are selected, then move to the next function
+                if (player.item1 && player.item2 && player.item3) {
+                    game();
+                }
+            });
+        });
+    }
+
+    // end of itemSelect section
+    function game() {
+    
+    }
 }
+
