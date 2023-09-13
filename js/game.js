@@ -10,8 +10,8 @@ function Character(name, health, attackPower, defense, item1, item2, item3) {
 }
 
 // declaring player character and demon lord
-let player = new Character('', 100, 10, 10, '', '', '');
-let demonLord = new Character('', 100, 10, 10, '', '', '');
+let player = new Character('', 100, 10, 0, '', '', '');
+let demonLord = new Character('', 100, 30, 0, '', '', '');
 
 // function to generate demon lord's name
 function demonLordNameGen() {
@@ -87,7 +87,7 @@ function main() {
                 index++;
 
                 scrollToBottom(textContainer);
-                setTimeout(displayNextNarration, 20); // Display next text after 2 seconds
+                setTimeout(displayNextNarration, 20); // display next text after 2 seconds
             }
             else {
                 itemSelect();
@@ -101,65 +101,69 @@ function main() {
     // end of start of game narration
 
     // item select section
-    // declaring item constants
-    const sword = document.getElementById('sword');
-    const shield = document.getElementById('shield');
-    const spellBook = document.getElementById('spellBook');
-    const potion = document.getElementById('potion');
-    const pasta = document.getElementById('pasta');
-
-    // declaring item description constants
-    const swordDescription = document.getElementById('swordDescription');  
-    const shieldDescription = document.getElementById('shieldDescription');
-    const spellBookDescription = document.getElementById('spellBookDescription');
-    const potionDescription = document.getElementById('potionDescription');
-    const pastaDescription = document.getElementById('pastaDescription');
-
     // function for item select section
     function itemSelect() {
         const itemSelect = document.getElementById('itemSelect');
         itemSelect.style.display = 'flex';
 
-        // Get all list items (items)
+        // get all list items (items)
         const items = document.querySelectorAll('.selectionChoices li');
-        // Get all item descriptions
+        // get all item descriptions
         const itemDescriptions = document.querySelectorAll('.itemDescription');
 
         // adding mousover event listeners to each item
         items.forEach((item, index) => {
             item.addEventListener('mouseover', () => {
-                // Show the corresponding item description
+                // show the corresponding item description
                 itemDescriptions[index].style.display = 'flex';
             });
     
             item.addEventListener('mouseout', () => {
-                // Hide the corresponding item description
+                // hide the corresponding item description
                 itemDescriptions[index].style.display = 'none';
             });
         });
 
         const itemButtons = document.querySelectorAll('.selectionChoices button');
+        let selectedItems = 0; // Counter for selected items
 
         // adding selected buttons to player's inventory
         itemButtons.forEach((button, index) => {
             button.addEventListener('click', () => {
                 // determining which item button was clicked
-                const selectedItem = button.textContent;
+                const selectedItemText = button.textContent;
 
                 // updating the player's object based on the selected item
+                // if the player has the sword or shield, add 10 to attack or defense
                 if (index === 0) {
-                    player.item1 = selectedItem;
+                    player.item1 = selectedItemText;
+                    if (player.item1 === "The Sword: Famish") {
+                        player.attackPower += 10;
+                    } else if (player.item1 === "The Shield: Olea") {
+                        player.defense += 10;
+                    }
                 } else if (index === 1) {
-                    player.item2 = selectedItem;
+                    player.item2 = selectedItemText;
+                    if (player.item2 === "The Sword: Famish") {
+                        player.attackPower += 10;
+                    } else if (player.item2 === "The Shield: Olea") {
+                        player.defense += 10;
+                    }
                 } else if (index === 2) {
-                    player.item3 = selectedItem;
+                    player.item3 = selectedItemText;
+                    if (player.item3 === "The Sword: Famish") {
+                        player.attackPower += 10;
+                    } else if (player.item3 === "The Shield: Olea") {
+                        player.defense += 10;
+                    }
                 }
 
-                // visual feedback
                 button.style.display = 'none';
+                selectedItems++;
 
                 // Checking if all three items are selected, then move to the next function
-                if (player.item1 && player.item2 && player.item3) {
+                if (selectedItems === 3) {
+                    itemSelect.style.display = 'none';
                     game();
                 }
             });
@@ -168,6 +172,45 @@ function main() {
 
     // end of itemSelect section
     function game() {
+        
+        // demon lord's first dialogue
+        const demonLordText0 = [
+            "So, Hero " + player.name + ", you have at last come to face me once again.",
+            "It has been a long time since we last met, but to me, a being who has lived for millennia, it feels as if it was just yesterday.",
+            "I have been waiting for you, Hero " + player.name + ".",
+            "Now then, FACE ME!"
+        ]
+
+        // function to display demon lord's first dialogue
+        function displayDemonLordText0() {
+            let index = 0;
+
+            function displayNextDemonLordText0() {
+                if (index < demonLordText0.length) {
+                    const demonLordText0Element = document.createElement('p');
+                    const br = document.createElement('br');
+                    demonLordText0Element.textContent = demonLord.name + ", The Demon Lord: " + demonLordText0[index];
+                    document.getElementById('textContainer').appendChild(demonLordText0Element);
+                    document.getElementById('textContainer').appendChild(br);
+                    index++;
+
+                    scrollToBottom(textContainer);
+                    setTimeout(displayNextDemonLordText0, 20); // Display next text after 2 seconds
+                }
+                else {
+                    battleSequence();
+                }
+            }
+            displayNextDemonLordText0();
+        }
+        displayDemonLordText0();
+
+        // battle sequence
+        function battleSequence() {
+
+        }
+
+
     
     }
 }
