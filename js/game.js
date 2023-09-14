@@ -130,47 +130,72 @@ function main() {
 
         const itemButtons = document.querySelectorAll('.selectionChoices button');
         let selectedItems = 0; // Counter for selected items
-        let item1Button = document.getElementById('item1Button');
-        let item2Button = document.getElementById('item2Button');
-        let item3Button = document.getElementById('item3Button');
+        let item1ActionButton = document.getElementById('item1ActionButton');
+        let item2ActionButton = document.getElementById('item2ActionButton');
+        let item3ActionButton = document.getElementById('item3ActionButton');
 
-        // adding selected buttons to player's inventory
         itemButtons.forEach((button, index) => {
-            button.addEventListener('click', () => {
-                // determining which item button was clicked
-                const selectedItemText = button.textContent;
+        button.addEventListener('click', () => {
+            // determining which item button was clicked
+            const selectedItemText = button.textContent;
 
-                // updating the player's object based on the selected item
-                // if the player has the sword or shield, add 10 to attack or defense
+            // Update the player's object based if they player has the sword or shield
                 if (index === 0) {
-                    player.item1 = selectedItemText;
+                player.item1 = selectedItemText;
                     if (player.item1 === "The Sword: Famish") {
                         player.attackPower += 10;
                     } else if (player.item1 === "The Shield: Olea") {
                         player.defense += 10;
+                    } else if (player.item1 === "The Spell Book of Power") {
+                        item1ActionButton.textContent = "The Spell Book of Power";
+                    } else if (player.item1 === "A Potion of Health") {
+                        item1ActionButton.textContent = "A Potion of Health";
+                    } else if (player.item1 === "Homemade Pasta") {
+                        item1ActionButton.textContent = "Homemade Pasta";
                     }
                 } else if (index === 1) {
-                    player.item2 = selectedItemText;
+                player.item2 = selectedItemText;
                     if (player.item2 === "The Sword: Famish") {
                         player.attackPower += 10;
                     } else if (player.item2 === "The Shield: Olea") {
                         player.defense += 10;
+                    } else if (player.item2 === "The Spell Book of Power") {
+                        item2ActionButton.textContent = "The Spell Book of Power";
+                    } else if (player.item2 === "A Potion of Health") {
+                        item2ActionButton.textContent = "A Potion of Health";
+                    } else if (player.item2 === "Homemade Pasta") {
+                        item2ActionButton.textContent = "Homemade Pasta";
                     }
                 } else if (index === 2) {
-                    player.item3 = selectedItemText;
+                player.item3 = selectedItemText;
                     if (player.item3 === "The Sword: Famish") {
                         player.attackPower += 10;
                     } else if (player.item3 === "The Shield: Olea") {
                         player.defense += 10;
+                    } else if (player.item3 === "The Spell Book of Power") {
+                        item3ActionButton.textContent = "The Spell Book of Power";
+                    } else if (player.item3 === "A Potion of Health") {
+                        item3ActionButton.textContent = "A Potion of Health";
+                    } else if (player.item3 === "Homemade Pasta") {
+                        item3ActionButton.textContent = "Homemade Pasta";
                     }
                 }
 
+                const item1Button = document.getElementById('item1Button');
+                const item2Button = document.getElementById('item2Button');
+                const item3Button = document.getElementById('item3Button');
+
+                // Hide the current button
                 button.style.display = 'none';
                 selectedItems++;
 
                 // Checking if all three items are selected, then move to the next function
                 if (selectedItems === 3) {
+                    item1Button.style.display = 'flex';
+                    item2Button.style.display = 'flex';
+                    item3Button.style.display = 'flex';
                     itemSelect.style.display = 'none';
+                    
                     game();
                 }
             });
@@ -341,34 +366,20 @@ function main() {
                 player.health += 10;
             };
 
-            // function to use item
-            function useItem() {
-                // Check which item the player selected (item1, item2, or item3)
-                const selectedItem = player.item1 || player.item2 || player.item3;
-            
-                if (selectedItem === "The Spell Book of Power") {
+            // defining useItem function
+            function useItem(item) {
+                if (item === "The Spell Book of Power") {
                     useSpellBook();
-                } else if (selectedItem === "A Potion of Health") {
+                } else if (item === "A Potion of Health") {
                     usePotion();
-                } else if (selectedItem === "Homemade Pasta") {
+                } else if (item === "Homemade Pasta") {
                     usePasta();
                 }
-            
-                // Remove the used item from the player's inventory
-                if (selectedItem === player.item1) {
-                    player.item1 = "null";
-                } else if (selectedItem === player.item2) {
-                    player.item2 = "null";
-                } else if (selectedItem === player.item3) {
-                    player.item3 = "null";
-                }
-            
-                // Disable the item button to prevent further use during this turn
-                document.getElementById('itemButton').disabled = true;
-            
-                // After using an item, proceed to the Demon Lord's turn
+                
+                // After using an item, hide the itemContainer and proceed to the Demon Lord's turn
+                document.getElementById('itemContainer').style.display = 'none';
                 demonLordTurnHandler();
-            };
+            }
 
 
 
@@ -418,25 +429,67 @@ function main() {
                 // handle the item button click
                 document.getElementById('itemButton').addEventListener('click', () => {
                     displayDialogue("Narrator: You decide to use an item!");
-                        const itemContainer = document.getElementById('itemContainer');
-                        itemContainer.style.display = 'flex';
+                    let itemContainer = document.getElementById('itemContainer');
+                    itemContainer.style.display = 'flex';
+
+                    // Add event listeners to the buttons
+                    item1ActionButton.addEventListener('click', () => {
+                        const item = item1ActionButton.textContent;
+                        useItem(item);
+                    });
+
+                    item2ActionButton.addEventListener('click', () => {
+                        const item = item2ActionButton.textContent;
+                        useItem(item);
+                    });
+
+                    item3ActionButton.addEventListener('click', () => {
+                        const item = item3ActionButton.textContent;
+                        useItem(item);
+                    });
                     // calling useItem function
                     useItem();
+                    // disable buttons at the end of the player's turn
+                    disableButtons();
+                    // switch to the demon lord's turn
+                    demonLordTurnHandler();
                 });
             };
 
             // Function to handle demon lord's turn
             function demonLordTurnHandler() {
-                // Implement demon lord's actions (e.g., attack player, etc.)
+                
+                setTimeout(() => {
+                    displayDialogue("Narrator: It is now " + demonLord.name + ", The Demon Lord's turn!");
+                }, 2000);
+                setTimeout(() => {
+                    displayDialogue("Narrator: The Demon Lord viciously attacks you!");
+                }, 3000);
+
+                // Implement demon lord's attack
+                player.health -= demonLord.attackPower - player.defense;
 
                 // After demon lord's turn is done, check for victory conditions and go back to player's turn if needed
                 if (player.health > 0 && demonLord.health > 0) {
                     playerTurn = true;
                     playerTurnHandler();
                 } else {
-                    // Handle end of battle, victory, or defeat
+                    if (player.health <= 0) {
+                        gameOver();
+                    }
                 }
             }
+
+            // function to handle game over
+            function gameOver() {
+                // Display game over message
+                const gameOverMessage = "You have been defeated by " + demonLord.name + ", The Demon Lord! You have failed to save the continent from his evil reign of terror!";
+                displayDialogue("Narrator: " + gameOverMessage);
+                setTimeout(() => {
+                    displayDialogue("Narrator: GAME OVER");
+                }, 1000);
+            };
+
 
             // Start the battle with the player's turn
             playerTurnHandler();
