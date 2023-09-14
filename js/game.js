@@ -10,8 +10,8 @@ function Character(name, health, attackPower, defense, item1, item2, item3) {
 }
 
 // declaring player character and demon lord
-let player = new Character('', 100, 10, 0, '', '', '');
-let demonLord = new Character('', 100, 30, 0, '', '', '');
+let player = new Character('', 100, 10, 0, 'null', 'null', 'null');
+let demonLord = new Character('', 100, 30, 0, 'null', 'null', 'null');
 
 // function to generate demon lord's name
 function demonLordNameGen() {
@@ -87,7 +87,7 @@ function main() {
                 index++;
 
                 scrollToBottom(textContainer);
-                setTimeout(displayNextNarration, 20); // display next text after 2 seconds
+                setTimeout(displayNextNarration, 300); // display next text after 3 seconds
             }
             else {
                 itemSelect();
@@ -114,13 +114,17 @@ function main() {
         // adding mousover event listeners to each item
         items.forEach((item, index) => {
             item.addEventListener('mouseover', () => {
-                // show the corresponding item description
-                itemDescriptions[index].style.display = 'flex';
+                // Check if itemDescriptions[index] exists before accessing its style
+                if (itemDescriptions[index]) {
+                    itemDescriptions[index].style.display = 'flex';
+                }
             });
-    
+        
             item.addEventListener('mouseout', () => {
-                // hide the corresponding item description
-                itemDescriptions[index].style.display = 'none';
+                // Check if itemDescriptions[index] exists before accessing its style
+                if (itemDescriptions[index]) {
+                    itemDescriptions[index].style.display = 'none';
+                }
             });
         });
 
@@ -195,7 +199,7 @@ function main() {
                     index++;
 
                     scrollToBottom(textContainer);
-                    setTimeout(displayNextDemonLordText0, 20); // Display next text after 2 seconds
+                    setTimeout(displayNextDemonLordText0, 300); // display next text after 2 seconds
                 }
                 else {
                     battleSequence();
@@ -205,13 +209,137 @@ function main() {
         }
         displayDemonLordText0();
 
+
+        
         // battle sequence
         function battleSequence() {
 
-        }
+            // declaring variables and constants used in battle sequence
+            // variable to keep track of who's turn it is
+            let playerTurn = true;
 
+            // constants for action messages
+            const attackMessage = "You attack " + demonLord.name + ", The Demon Lord!";
+            const talkMessage = "You try to talk to " + demonLord.name + ", The Demon Lord.";
+            const itemMessage = "You use an item!";
 
-    
+            // declaring functions used in battle sequence
+            // function to disable buttons
+            function disableButtons() {
+                document.getElementById('attackButton').disabled = true;
+                document.getElementById('talkButton').disabled = true;
+                document.getElementById('itemButton').disabled = true;
+            };
+
+            //function to display dialogue in text container
+            function displayDialogue(text) {
+                const dialogueElement = document.createElement('p');
+                const br = document.createElement('br');
+                dialogueElement.textContent = text;
+                document.getElementById('textContainer').appendChild(dialogueElement);
+                document.getElementById('textContainer').appendChild(br);
+                scrollToBottom(textContainer);
+            };
+
+            // function to generate Demon Lord's response to the player's chosen dialogue selection choice
+            function demonLordResponse(playerDialogue) {
+                if (playerDialogue.includes('Why did you come back?!')) {
+                    return "Why? Because it's in my nature, Hero. My hunger for chaos and destruction knows no bounds!";
+                }
+                else if (playerDialogue.includes("I give up!")) {
+                    return "HAHAHAHAHAHAHA!!! I knew you were a coward, Hero " + player.name + "! I knew you would give up! You are no match for me!";
+                }
+                else if (playerDialogue.includes("I'll give you whatever you want, just stop!")) {
+                    return "(He pauses for a second) ...Hero " + player.name + ", all I have wanted for the past 30 years is to see your precious continent be consumed by chaos and carnage. But, if you are truly asking me about my deepest desire; What I have truly wanted for the past 30 years is for something to satiate my endless appetite. It has truly driven me mad!!!! HAHAHAHAHAHAHAHA!!!!!"
+                }
+                else if (playerDialogue.includes("It's over for you!")) {
+                    return "HAHAHAHAHAHAHA!!! You think you can defeat me, Hero " + player.name + "?! I am going to eat you alive!";
+                }
+            };
+
+            // function for talk options
+            function talkOptions() {
+                // display talk options
+                document.getElementById('dialogueSelect').style.display = 'flex';
+            
+                // Add event listener to the parent container of dialogue choices
+                const dialogueContainer = document.querySelector('.dialogueSelectionChoices');
+                dialogueContainer.addEventListener('click', (event) => {
+                    if (event.target.tagName === 'BUTTON') {
+                        // Get the text of the clicked button (the player's chosen dialogue)
+                        const playerDialogue = event.target.textContent;
+            
+                        // Display Demon Lord's response
+                        const demonLordResponseText = demonLordResponse(playerDialogue);
+                        displayDialogue(demonLordResponseText);
+            
+                        // Hide the dialogue selection and proceed to the Demon Lord's turn
+                        document.getElementById('dialogueSelect').style.display = 'none';
+                        demonLordTurnHandler();
+                    }
+                });
+            };
+
+            // function to handle player's turn
+            function playerTurnHandler() {
+                // enable player action buttons (e.g., attack, guard, etc.)
+                document.getElementById('attackButton').disabled = false;
+                document.getElementById('talkButton').disabled = false;
+                document.getElementById('itemButton').disabled = false;
+                       
+                // handle the attack button click
+                document.getElementById('attackButton').addEventListener('click', () => {
+                    // Implement player's attack
+                    demonLord.health -= player.attackPower - demonLord.defense;  
+                    // display attack message
+                    const attackMessageElement = document.createElement('p');
+                    const br = document.createElement('br');
+                    attackMessageElement.textContent = "Narrator: " + attackMessage;
+                    document.getElementById('textContainer').appendChild(attackMessageElement);
+                    document.getElementById('textContainer').appendChild(br);
+                    scrollToBottom(textContainer);
+
+                    // disable buttons at the end of the player's turn
+                    disableButtons();
+                    // switch to the demon lord's turn
+                    demonLordTurnHandler();
+                });
+
+                // handle the talk button click
+                document.getElementById('talkButton').addEventListener('click', () => {
+                    // display talk message
+                    const talkMessageElement = document.createElement('p');
+                    const br = document.createElement('br');
+                    talkMessageElement.textContent = "Narrator: " + talkMessage;
+                    document.getElementById('textContainer').appendChild(talkMessageElement);
+                    document.getElementById('textContainer').appendChild(br);
+                    scrollToBottom(textContainer);
+
+                    // present talk options
+                    talkOptions();
+                    // disable buttons at the end of the player's turn
+                    disableButtons();
+                    // switch to the demon lord's turn
+                    demonLordTurnHandler();
+                });
+            }
+
+            // Function to handle demon lord's turn
+            function demonLordTurnHandler() {
+                // Implement demon lord's actions (e.g., attack player, etc.)
+
+                // After demon lord's turn is done, check for victory conditions and go back to player's turn if needed
+                if (player.health > 0 && demonLord.health > 0) {
+                    playerTurn = true;
+                    playerTurnHandler();
+                } else {
+                    // Handle end of battle, victory, or defeat
+                }
+            }
+
+            // Start the battle with the player's turn
+            playerTurnHandler();
+        }    
     }
 }
 

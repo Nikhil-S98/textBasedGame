@@ -35,20 +35,28 @@
                         </div>
                     </div>
 
+                    <div id="dialogueSelect" style="display: none">
+                        <div id="dialogueSelectQuestion">What do you say to The Demon Lord?</div>
+                        <ol class="selectionChoices dialogueSelectionChoices">
+                            <li><button>Why did you come back?!</button></li>
+                            <li><button>I give up!</button></li>
+                            <li><button>I'll give you whatever you want, just stop!</button></li>
+                            <li><button>It's over for you!</button></li>
+                            <li id="pastaDialogue" style="display: none;"><button>Hey Demon Lord! Look at what I've got here! (Pull out the homemade pasta).</button></li>
+                        </ol>
+                    </div>
+
                 </div>
 
-                <div id="textContainer">
-
-                </div>
+                <div id="textContainer"></div>
 
             </div>
 
             <div id="gameBottom">
                 <div id="buttonContainer">
-                    <button id="attackButton">attack</button>
-                    <button id="guardButton">guard</button>
-                    <button id="talkButton">talk</button>
-                    <button id="itemButton">item</button>
+                    <button id="attackButton" disabled>attack</button>
+                    <button id="talkButton" disabled>talk</button>
+                    <button id="itemButton" disabled>item</button>
                 </div>
                 
                 <div id="optionContainer"></div>
