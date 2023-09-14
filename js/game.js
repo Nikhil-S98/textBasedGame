@@ -130,6 +130,9 @@ function main() {
 
         const itemButtons = document.querySelectorAll('.selectionChoices button');
         let selectedItems = 0; // Counter for selected items
+        let item1Button = document.getElementById('item1Button');
+        let item2Button = document.getElementById('item2Button');
+        let item3Button = document.getElementById('item3Button');
 
         // adding selected buttons to player's inventory
         itemButtons.forEach((button, index) => {
@@ -271,7 +274,10 @@ function main() {
             
                         // Display Demon Lord's response
                         const demonLordResponseText = demonLordResponse(playerDialogue);
-                        displayDialogue(demonLordResponseText);
+                        displayDialogue("The Hero, " + player.name + ": " + playerDialogue);
+                        setTimeout(() => {
+                            displayDialogue(demonLord.name + ", The Demon Lord: " + demonLordResponseText);
+                        }, 1000);
             
                         // Hide the dialogue selection and proceed to the Demon Lord's turn
                         document.getElementById('dialogueSelect').style.display = 'none';
@@ -279,6 +285,92 @@ function main() {
                     }
                 });
             };
+
+            // functions for items
+            // function to use spell book
+            function useSpellBook() {
+                const response = "I created that book, Hero. Magic won't work on me!";
+                const spellBookMessage = "You read out loud a random page from The Spell Book of Power! A fireball forms in front of you and shoots out towards " + demonLord.name + ", The Demon Lord!";
+                const spellBookFailMessage = "The spell hits The Demon Lord, but he shrugs it off like it was nothing!";
+                
+                displayDialogue("Narrator: " + spellBookMessage);
+                setTimeout(() => {
+                    displayDialogue("Narrator: " + spellBookFailMessage);
+                }, 3000);
+                setTimeout(() => {
+                    displayDialogue(demonLord.name + ", The Demon Lord: " + response);
+                }, 3000);
+            }
+
+            // function to use potion
+            function usePotion() {
+                displayDialogue("Narrator: You drink a potion and feel your your vitality and vigor coming back to you. You feel yourself coming into good health!");
+                setTimeout(() => {
+                    displayDialogue("Narrator: ...");
+                }, 1000);
+                setTimeout(() => {
+                    displayDialogue("Narrator: ...");
+                }, 1000);
+                setTimeout(() => {
+                    displayDialogue("Narrator: ...");
+                }, 1000);
+                setTimeout(() => {
+                    displayDialogue("Narrator: You remember to yourself that that potion you just consumed is incredibly old. You feel yourself getting sick! Your insides are burning and you feel like you need to lay down this very moment!");
+                }, 1000);
+                setTimeout(() => {
+                    displayDialogue(demonLord.name + ", The Demon Lord: HAHAHAHA, WHAT'S WRONG HERO??? YOU'RE LOOKING A LITTLE GREEN AROUND THE GILLS!!!");
+                }, 2000);
+                player.health -= 20;
+            };
+
+            // function to use pasta
+            function usePasta() {
+                displayDialogue("Narrator: You pull the big bowl of pasta and for a moment notice out of the corner of your eye the look on The Demon Lord's face.");
+                setTimeout(() => {
+                    displayDialogue("Narrator: He is salivating and envious. It seems like he hasn't eaten in a long time.");
+                }, 2000);
+                setTimeout(() => {
+                    displayDialogue(demonLord.name + ", The Demon Lord: You know Hero " + player.name + ", I would give up this whole Demon Lord thing if I could just have a bite of that pasta. It looks so delicious!");
+                }, 2000);
+                setTimeout(() => {
+                    displayDialogue("Narrator: You think to yourself that you could use this to your advantage, however you relish in the spite of eating this pasta right in front of him. You take a bite of the pasta and it is delicious! You feel some of your strength and vitality coming back to you!");
+                }, 2000);
+                setTimeout(() => {
+                    displayDialogue(demonLord.name + ", The Demon Lord:(He looks at you with a real hatred in his eyes) I'M GOING TO EAT YOU ALIVE, HERO " + player.name.toUpperCase() + "!!!!!");
+                }, 3000);
+                player.health += 10;
+            };
+
+            // function to use item
+            function useItem() {
+                // Check which item the player selected (item1, item2, or item3)
+                const selectedItem = player.item1 || player.item2 || player.item3;
+            
+                if (selectedItem === "The Spell Book of Power") {
+                    useSpellBook();
+                } else if (selectedItem === "A Potion of Health") {
+                    usePotion();
+                } else if (selectedItem === "Homemade Pasta") {
+                    usePasta();
+                }
+            
+                // Remove the used item from the player's inventory
+                if (selectedItem === player.item1) {
+                    player.item1 = "null";
+                } else if (selectedItem === player.item2) {
+                    player.item2 = "null";
+                } else if (selectedItem === player.item3) {
+                    player.item3 = "null";
+                }
+            
+                // Disable the item button to prevent further use during this turn
+                document.getElementById('itemButton').disabled = true;
+            
+                // After using an item, proceed to the Demon Lord's turn
+                demonLordTurnHandler();
+            };
+
+
 
             // function to handle player's turn
             function playerTurnHandler() {
@@ -322,7 +414,16 @@ function main() {
                     // switch to the demon lord's turn
                     demonLordTurnHandler();
                 });
-            }
+
+                // handle the item button click
+                document.getElementById('itemButton').addEventListener('click', () => {
+                    displayDialogue("Narrator: You decide to use an item!");
+                        const itemContainer = document.getElementById('itemContainer');
+                        itemContainer.style.display = 'flex';
+                    // calling useItem function
+                    useItem();
+                });
+            };
 
             // Function to handle demon lord's turn
             function demonLordTurnHandler() {
