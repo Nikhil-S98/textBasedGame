@@ -7,6 +7,8 @@
         <title>textBasedGame</title>
     </head>
     <body>
+        
+        <h1>Hunger Quest</h1>
         <div id="gameArea">
             <div id="gameTop">
 
@@ -71,8 +73,18 @@
             </div>
         </div>
 
+        <audio id="myAudio" controls loop autoplay>
+            <source src="music/fantasyScore.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
 
 
+        <script>
+            // Get the audio element by its ID
+            var audio = document.getElementById('myAudio');
+            // Set the maximum volume to 50% (0.5)
+            audio.volume = 0.5;
+        </script>
 
         <script src="./js/game.js"></script>
     </body>

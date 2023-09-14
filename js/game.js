@@ -87,7 +87,7 @@ function main() {
                 index++;
 
                 scrollToBottom(textContainer);
-                setTimeout(displayNextNarration, 300); // display next text after 3 seconds
+                setTimeout(displayNextNarration, 2000); // display next text after 3 seconds
             }
             else {
                 itemSelect();
@@ -227,7 +227,7 @@ function main() {
                     index++;
 
                     scrollToBottom(textContainer);
-                    setTimeout(displayNextDemonLordText0, 300); // display next text after 2 seconds
+                    setTimeout(displayNextDemonLordText0, 2000); // display next text after 2 seconds
                 }
                 else {
                     battleSequence();

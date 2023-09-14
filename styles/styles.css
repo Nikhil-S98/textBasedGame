@@ -8,10 +8,17 @@ body {
     font-family: "Georgia", Luminari, Times New Roman, serif;
     font-size: 14px;
     display: flex;
+    flex-direction: column;
+    gap: 10px;
     justify-content: center;
     align-items: center;
     margin: 0;
     height: 100vh;
+}
+
+h1 {
+    font-size: 40px;
+    color: #ff0000
 }
 
 #gameArea {
@@ -149,3 +156,4 @@ button {
 #pastaDialogue {
     color: #fff700;
 }
+
